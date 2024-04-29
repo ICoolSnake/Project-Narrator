@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Narrator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/b3beec386a.js" crossorigin="anonymous"></script>
+    <style> body {
+        background-image: url("{{ url_for('static', filename='background.png') }}");
+    } </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div>
+            <a href="https://www.coolsnake.io" style="clear: both; float: left" target="_blank">
+                <img alt="logo" id="logo" src="{{ url_for('static', filename='logo.png') }}">
+            </a>
+        </div>
+        <div id="title-container">
+            <p>&nbsp;&#x2022; &nbsp;Project Narrator</p>
+        </div>
+        <div class="nav-item-right">
+            <div id="lang-container">
+                <input type="checkbox" id="toggle" class="hidden-trigger">
+                <label for="toggle" id="circle">
+                    <img src="{{ url_for('static', filename='usa-uk.png') }}" alt="Language">
+                </label>
+
+                <div class="subs">
+                    <button class="sub-circle">
+                        <input value="English" name="sub-circle" type="radio" id="sub1" class="hidden-sub-trigger">
+                        <label for="sub1">
+                            <img src="{{ url_for('static', filename='usa-uk.png') }}" alt="English">
+                        </label>
+                    </button>
+                    <button class="sub-circle">
+                        <input value="German" name="sub-circle" type="radio" id="sub2" class="hidden-sub-trigger">
+                        <label for="sub2">
+                            <img src="{{ url_for('static', filename='germany.png') }}" alt="German">
+                        </label>
+                    </button>
+                    <button class="sub-circle">
+                        <input value="Turkish" name="sub-circle" type="radio" id="sub3" class="hidden-sub-trigger">
+                        <label for="sub3">
+                            <img src="{{ url_for('static', filename='turkiye.png') }}" alt="Turkish">
+                        </label>
+                    </button>
+                </div>
+            </div>
+            <form id="app-cover">
+                <div id="select-box">
+                    <input type="checkbox" id="options-view-button">
+                    <div id="select-button" class="brd">
+                        <div id="selected-value">
+                            <span>David Attenborough</span>
+                        </div>
+                        <div id="chevrons">
+                            <i class="fas fa-chevron-up"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div id="options">
+                        <div class="option">
+                            <input class="s-c top" type="radio" name="platform" value="Change with your first voice ID">
+                            <input class="s-c bottom" type="radio" name="platform" value="Change with your first voice ID">
+                            <span class="label">David Attenborough</span>
+                            <span class="opt-val">David Attenborough</span>
+                        </div>
+                        <div class="option">
+                            <input class="s-c top" type="radio" name="platform" value="Change with your second voice ID">
+                            <input class="s-c bottom" type="radio" name="platform" value="Change with your second voice ID">
+                            <span class="label">Loki</span>
+                            <span class="opt-val">Loki</span>
+                        </div>
+                        <div class="option">
+                            <input class="s-c top" type="radio" name="platform" value="Change with your third voice ID">
+                            <input class="s-c bottom" type="radio" name="platform" value="Change with your third voice ID">
+                            <span class="label">Actor3</span>
+                            <span class="opt-val">Actor3</span>
+                        </div>
+                        <div class="option">
+                            <input class="s-c top" type="radio" name="platform" value="Change with your fourth voice ID">
+                            <input class="s-c bottom" type="radio" name="platform" value="Change with your fourth voice ID">
+                            <span class="label">Actor4</span>
+                            <span class="opt-val">Actor4</span>
+                        </div>
+                        <div class="option">
+                            <input class="s-c top" type="radio" name="platform" value="Change with your fifth voice ID">
+                            <input class="s-c bottom" type="radio" name="platform" value="Change with your fifth voice ID">
+                            <span class="label">Actor5</span>
+                            <span class="opt-val">Actor5</span>
+                        </div>
+                        <div id="option-bg"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section id="narrator-container">
+        <div id="button-container">
+            <button id="startButton" style="display: block;"></button>
+            <div class="socket">
+                <div class="stopButton"></div>
+            </div>
+        </div>
+        <div id="video-container">
+        </div>
+    </section>
+    <section id="explan-container">
+        <h2>What is this project about:</h2>
+        <div>
+            <p>Welcome to Project Narrator, a dynamic and interactive web application that uses cutting-edge AI to narrate your actions in real time. By accessing your webcam, our application captures your movements and translates them into humorous and engaging commentary. This unique narrative is then voiced by selected personas, thanks to our integration with the Eleven Labs API, enhancing the user experience with a variety of vocal styles and languages.</p>
+            <p>Whether you're simply moving around your room, cooking, or performing any routine task, Project Narrator adds a layer of fun and entertainment by providing a live commentary in the style of famous voices like David Attenborough or even fictional characters like Loki. Perfect for sharing a laugh with friends or streaming content creators looking to add a novel twist to their broadcasts.</p>
+            <p>Get started by simply clicking the 'Start' button to activate the webcam and choose your preferred narrator to hear your actions described in real time. Don't just live your life, let Project Narrator tell your story in a way that's sure to amuse and impress!</p>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div id="footer-container">
+        <div></div>
+        <div id="copyright" style="font-size: 16px;">&copy; Cool Snake 2024. All rights reserved.</div>
+        <div class="git">
+            <a href="https://github.com/ICoolSnake" style="clear: both; float: right;" target="_blank">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    var audioQueue = [];
+    var lastAddedAudio = null;
+    var audioElement = null;
+    var pollInterval;
+    var attempts = 0;
+    var maxAttempts = 30;
+
+    document.getElementById("startButton").onclick = function () {
+        this.classList.add('startButtonClicked');
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/start", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var img = document.createElement('img');
+                img.alt = 'Webcam Stream';
+                img.src = "{{ url_for('video_feed') }}";
+                img.onload = function () {
+                    document.getElementById("startButton").style.display = 'none';
+                    document.querySelector('.socket').classList.add('visible')
+                    document.querySelector('.stopButton').classList.add('active');
+                };
+                document.getElementById("video-container").innerHTML = '';
+                document.getElementById("video-container").appendChild(img);
+
+                audioElement = new Audio();
+                audioElement.preload = "auto";
+                document.body.appendChild(audioElement);
+
+                startPolling();
+            }
+        };
+        xhr.send();
+    };
+
+    $('body').on('click', '.socket', function() {
+        var stopButton = $(this).find('.stopButton');
+
+        if (stopButton.hasClass('active')) {
+            stopButton.hide();
+            stopButton.removeClass('active');
+            document.querySelector('.socket').classList.remove('visible');
+            document.getElementById("startButton").classList.remove('startButtonClicked');
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/stop", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                        clearInterval(pollInterval);
+                        audioQueue = [];
+                        lastAddedAudio = null;
+                        attempts = 0;
+
+                        if (audioElement) {
+                            audioElement.pause();
+                            audioElement.src = '';
+                            audioElement.currentTime = 0;
+                            if (audioElement.parentNode) {
+                                audioElement.parentNode.removeChild(audioElement);
+                            }
+                        }
+
+                        var videoContainer = document.getElementById("video-container");
+                        if (videoContainer) {
+                            var video = videoContainer.querySelector('img');
+                            if (video) {
+                                video.src = '';
+                            }
+                        }
+
+                        document.getElementById("video-container").innerHTML = '';
+                        document.getElementById("startButton").style.display = 'block';
+                        stopButton.show();
+                }
+            };
+            xhr.send();
+        }
+    });
+
+    function resetStopButtonState() {
+        var stopButton = document.querySelector('.stopButton');
+        if (stopButton) {
+            stopButton.classList.remove('active');
+            stopButton.classList.add('visible');
+        }
+    }
+
+    function startPolling() {
+        clearInterval(pollInterval);
+        attempts = 0;
+        var interval = 2000;
+
+        pollInterval = setInterval(function () {
+            if (attempts < maxAttempts) {
+                attempts++;
+                pollForAudioFile();
+            } else {
+                clearInterval(pollInterval);
+                console.error("Failed to load audio after maximum attempts.")
+            }
+        }, interval);
+    }
+
+    function pollForAudioFile() {
+        var cacheBuster = new Date().getTime();
+        var xhrAudio = new XMLHttpRequest();
+        xhrAudio.open("GET", "/get_latest_audio_folder?cb=" + cacheBuster, true);
+        xhrAudio.onreadystatechange = function () {
+            if (xhrAudio.readyState == 4 && xhrAudio.status == 200) {
+                var audioFolderName = xhrAudio.responseText;
+                var audioPath = '/audio/' + audioFolderName + '/audio.wav';
+                if (lastAddedAudio !== audioPath) {
+                    audioQueue.push(audioPath);
+                    lastAddedAudio = audioPath;
+                    if (audioQueue.length === 1) {
+                        playAudioFromQueue();
+                    }
+                }
+                else if (xhrAudio.status == 404 && attempts >= maxAttempts) {
+                    clearInterval(pollInterval);
+                    setTimeout(startPolling, 10000);
+                }
+            }
+        };
+        xhrAudio.send();
+    }
+
+    function playAudioFromQueue() {
+        if (audioQueue.length === 0 || audioElement === null) {
+            return;
+        }
+        audioElement.src = audioQueue[0];
+        audioElement.play().then(function () {
+            audioElement.onended = function () {
+                audioQueue.shift();
+                if (audioQueue.length > 0) {
+                    playAudioFromQueue();
+                } else {
+                    startPolling();
+                }
+            };
+        }).catch(function (e) {
+            console.error("Error playing audio:", e);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var buttons = document.querySelectorAll('.sub-circle');
+        var mainCircle = document.querySelector('#circle');
+        var toggle = document.querySelector('#toggle');
+
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                mainCircle.querySelector('img').src = this.querySelector('img').src;
+
+                toggle.checked = false;
+
+                event.stopPropagation();
+            });
+        });
+    });
+
+    document.querySelectorAll('.option input[type="radio"]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            if(this.checked) {
+                var selectedVoiceID = this.value;
+                fetch('/set_voice', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({voiceID: selectedVoiceID}),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Voice ID set to: ', data.voiceID);
+                })
+                .catch((error) => {
+                    console.error('Error: ', error);
+                });
+            }
+            document.getElementById('options-view-button').checked = false;
+        });
+    });
+
+    document.querySelectorAll('.hidden-sub-trigger').forEach(function (input) {
+        input.addEventListener('change', function () {
+            if(this.checked) {
+                var language = this.value;
+                fetch('/set_language', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({language: language}),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Language set to: ', data.language);
+                    })
+                    .catch((error) => {
+                        console.error('Error: ', error);
+                    });
+            }
+        });
+    });
+
+</script>
+</body>
+</html>
